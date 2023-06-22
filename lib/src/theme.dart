@@ -20,6 +20,7 @@ typedef MonthBasedStyleProvider<T> = T Function(DateTime month);
 typedef WeekBasedStyleProvider<T> = T Function(Week week);
 typedef DateBasedStyleProvider<T> = T Function(DateTime date);
 typedef TimeBasedStyleProvider<T> = T Function(Duration time);
+typedef ResourceBasedStyleProvider<T> = T Function(String resource);
 
 /// Bundles styles for all Timetable widgets.
 ///

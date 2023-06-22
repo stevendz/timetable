@@ -213,6 +213,26 @@ final positioningDemoEvents = <BasicEvent>[
   _DemoEvent.allDay(12, -3, 2),
 ];
 
+final resourceDemoEvents = <BasicEvent>[
+  _DemoEvent(0, 1, const Duration(hours: 10), const Duration(hours: 11), resource: '1'),
+  _DemoEvent(0, 2, const Duration(hours: 11), const Duration(hours: 12), resource: '2'),
+  _DemoEvent(0, 3, const Duration(hours: 12), const Duration(hours: 13), resource: '1'),
+  _DemoEvent(1, 0, const Duration(hours: 10), const Duration(hours: 12), resource: '1'),
+  _DemoEvent(1, 1, const Duration(hours: 10), const Duration(hours: 12), resource: '2'),
+  _DemoEvent(1, 2, const Duration(hours: 14), const Duration(hours: 16), resource: '3'),
+  _DemoEvent(2, 0, const Duration(hours: 10), const Duration(hours: 20), resource: '1'),
+  _DemoEvent(2, 1, const Duration(hours: 10), const Duration(hours: 12), resource: '2'),
+  _DemoEvent(2, 2, const Duration(hours: 13), const Duration(hours: 15), resource: '1'),
+  _DemoEvent.allDay(0, 0, 2, resource: '1'),
+  _DemoEvent.allDay(1, 1, 1, resource: '2'),
+  _DemoEvent.allDay(2, 0, 2, resource: '3'),
+  _DemoEvent.allDay(3, 2, 2, resource: '1'),
+  _DemoEvent.allDay(4, 2, 1, resource: '1'),
+  _DemoEvent.allDay(5, 2, 1, resource: '1'),
+  _DemoEvent.allDay(6, 2, 1, resource: '1'),
+  _DemoEvent.allDay(7, 2, 2, resource: '2'),
+];
+
 class _DemoEvent extends BasicEvent {
   _DemoEvent(
     int demoId,
@@ -220,45 +240,63 @@ class _DemoEvent extends BasicEvent {
     Duration start,
     Duration end, {
     int endDateOffset = 0,
+    String resource = 'abc',
   }) : super(
           id: '$demoId-$eventId',
           title: '$demoId-$eventId',
           backgroundColor: _getColor('$demoId-$eventId'),
           start: DateTimeTimetable.today() + demoId.days + start,
           end: DateTimeTimetable.today() + (demoId + endDateOffset).days + end,
+          resource: resource,
         );
 
-  _DemoEvent.allDay(int id, int startOffset, int length)
+  _DemoEvent.allDay(int id, int startOffset, int length, {String resource = 'abc'})
       : super(
           id: 'a-$id',
           title: 'a-$id',
           backgroundColor: _getColor('a-$id'),
           start: DateTimeTimetable.today() + startOffset.days,
           end: DateTimeTimetable.today() + (startOffset + length).days,
+          resource: resource,
         );
 
   static Color _getColor(String id) {
-    return Random(id.hashCode)
-        .nextColorHsv(saturation: 0.6, value: 0.8, alpha: 1)
-        .toColor();
+    return Random(id.hashCode).nextColorHsv(saturation: 0.6, value: 0.8, alpha: 1).toColor();
   }
 }
+
+final resources = ['1', '2', '3'];
 
 List<TimeOverlay> positioningDemoOverlayProvider(
   BuildContext context,
   DateTime date,
+  String? res,
 ) {
   assert(date.debugCheckIsValidTimetableDate());
 
-  final widget =
-      ColoredBox(color: context.theme.brightness.contrastColor.withOpacity(.1));
+  final widget = ColoredBox(color: context.theme.brightness.contrastColor.withOpacity(.1));
 
-  if (DateTime.monday <= date.weekday && date.weekday <= DateTime.friday) {
-    return [
-      TimeOverlay(start: 0.hours, end: 8.hours, widget: widget),
-      TimeOverlay(start: 20.hours, end: 24.hours, widget: widget),
-    ];
+  if (res == null) {
+    if (DateTime.monday <= date.weekday && date.weekday <= DateTime.friday) {
+      return [
+        TimeOverlay(start: 0.hours, end: 8.hours, widget: widget),
+        TimeOverlay(start: 20.hours, end: 24.hours, widget: widget),
+      ];
+    } else {
+      return [TimeOverlay(start: 0.hours, end: 24.hours, widget: widget)];
+    }
   } else {
-    return [TimeOverlay(start: 0.hours, end: 24.hours, widget: widget)];
+    if (res == '1') {
+      if (DateTime.monday <= date.weekday && date.weekday <= DateTime.friday) {
+        return [
+          TimeOverlay(start: 0.hours, end: 9.hours, widget: widget),
+          TimeOverlay(start: 19.hours, end: 24.hours, widget: widget),
+        ];
+      } else {
+        return [TimeOverlay(start: 0.hours, end: 24.hours, widget: widget)];
+      }
+    } else {
+      return [TimeOverlay(start: 0.hours, end: 5.hours, widget: widget)];
+    }
   }
 }

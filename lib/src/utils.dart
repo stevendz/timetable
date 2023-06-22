@@ -38,6 +38,12 @@ typedef DateWidgetBuilder = Widget Function(
   BuildContext context,
   DateTime date,
 );
+typedef DateResourceWidgetBuilder = Widget Function(
+    BuildContext context,
+    DateTime date,
+    String resource,
+    );
+
 
 extension DateTimeTimetable on DateTime {
   static DateTime date(int year, [int month = 1, int day = 1]) {

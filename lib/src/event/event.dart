@@ -12,6 +12,7 @@ abstract class Event with Diagnosticable {
   const Event({
     required this.start,
     required this.end,
+    this.resource,
   }) : assert(start <= end);
 
   /// Start of the event; inclusive.
@@ -19,6 +20,9 @@ abstract class Event with Diagnosticable {
 
   /// End of the event; exclusive.
   final DateTime end;
+
+  /// Assigned resource, if any
+  final String? resource;
 
   bool get isAllDay => end.difference(start).inDays >= 1;
 
@@ -50,6 +54,12 @@ extension TimetableEventIterable<E extends Event> on Iterable<E> {
       final result = a.start.compareTo(b.start);
       if (result != 0) return result;
       return a.end.compareTo(b.end);
+    });
+  }
+
+  List<E> sortedByResource() {
+    return sorted((a, b) {
+      return a.resource!.compareTo(b.resource!);
     });
   }
 }

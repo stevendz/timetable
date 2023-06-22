@@ -9,6 +9,7 @@ class TimeOverlay {
     required this.start,
     required this.end,
     required this.widget,
+    this.resource,
     this.position = TimeOverlayPosition.behindEvents,
   })  : assert(start.debugCheckIsValidTimetableTimeOfDay()),
         assert(end.debugCheckIsValidTimetableTimeOfDay()),
@@ -16,6 +17,8 @@ class TimeOverlay {
 
   final Duration start;
   final Duration end;
+
+  final String? resource;
 
   /// The widget that will be shown as an overlay.
   final Widget widget;
@@ -37,21 +40,20 @@ enum TimeOverlayPosition { behindEvents, inFrontOfEvents }
 typedef TimeOverlayProvider = List<TimeOverlay> Function(
   BuildContext context,
   DateTime date,
+  String? resource,
 );
 
-List<TimeOverlay> emptyTimeOverlayProvider(
-  BuildContext context,
-  DateTime date,
-) {
+// ignore: prefer_function_declarations_over_variables
+final TimeOverlayProvider emptyTimeOverlayProvider = (context, date, resource) {
   assert(date.debugCheckIsValidTimetableDate());
   return [];
-}
+};
 
 TimeOverlayProvider mergeTimeOverlayProviders(
   List<TimeOverlayProvider> overlayProviders,
 ) {
-  return (context, date) =>
-      overlayProviders.expand((it) => it(context, date)).toList();
+  return (context, date, resource) =>
+      overlayProviders.expand((it) => it(context, date, resource)).toList();
 }
 
 class DefaultTimeOverlayProvider extends InheritedWidget {

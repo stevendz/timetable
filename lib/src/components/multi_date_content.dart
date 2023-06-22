@@ -75,7 +75,7 @@ class _MultiDateContentState<E extends Event>
             DefaultEventProvider.of<E>(context)?.call(date.fullDayInterval) ??
                 [],
         overlays:
-            DefaultTimeOverlayProvider.of(context)?.call(context, date) ?? [],
+            DefaultTimeOverlayProvider.of(context)?.call(context, date, null) ?? [],
       ),
     );
 

@@ -26,7 +26,7 @@ import 'multi_date_event_header.dart';
 /// * [DefaultEventBuilder.allDayOverflowBuilder], which creates this widget by
 ///   default.
 class MultiDateEventHeaderOverflow extends StatelessWidget {
-  MultiDateEventHeaderOverflow(
+  MultiDateEventHeaderOverflow( //todo:could add resource
     this.date, {
     super.key,
     required this.overflowCount,

@@ -17,6 +17,7 @@ class BasicEvent extends Event {
     required this.backgroundColor,
     required super.start,
     required super.end,
+    super.resource,
   });
 
   /// An ID for this event.
@@ -42,6 +43,7 @@ class BasicEvent extends Event {
     bool? showOnTop,
     DateTime? start,
     DateTime? end,
+    String? resource,
   }) {
     return BasicEvent(
       id: id ?? this.id,
@@ -49,17 +51,19 @@ class BasicEvent extends Event {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       start: start ?? this.start,
       end: end ?? this.end,
+      resource: resource ?? this.resource,
     );
   }
 
   @override
-  int get hashCode => Object.hash(super.hashCode, title, backgroundColor);
+  int get hashCode => Object.hash(super.hashCode, title, backgroundColor, resource);
   @override
   bool operator ==(dynamic other) =>
       other is BasicEvent &&
       super == other &&
       title == other.title &&
-      backgroundColor == other.backgroundColor;
+      backgroundColor == other.backgroundColor &&
+      resource == other.resource;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
